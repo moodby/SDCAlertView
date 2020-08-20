@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 11.1.3
+**Bug Fixes:**
+- Removed blur
+
 ### 11.1.2
 **Bug Fixes:**
 - Fix incorrect padding for content views in action sheets
