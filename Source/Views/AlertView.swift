@@ -98,13 +98,8 @@ final class AlertView: UIView, AlertControllerViewRepresentable {
             return
         }
 
-        var style: UIBlurEffect.Style
-        if #available(iOS 13.0, *) {
-            style = .systemMaterial
-        } else {
-            style = .extraLight
-        }
-        let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: style))
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = self.visualStyle.backgroundColor
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
 
         self.insertSubview(backgroundView, belowSubview: self.scrollView)

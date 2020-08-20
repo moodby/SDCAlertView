@@ -1,7 +1,6 @@
 import UIKit
 
 final class ActionSheetCancelActionView: UIView {
-    private let blurBackground = PassthroughEffectView()
     private let cancelButton = UIButton(type: .custom)
     private let cancelLabel = UILabel()
     private var action: AlertAction!
@@ -31,7 +30,7 @@ final class ActionSheetCancelActionView: UIView {
         self.layer.cornerRadius = visualStyle.cornerRadius
         self.layer.masksToBounds = true
 
-        self.addBlurBackground(effect: visualStyle.blurEffect)
+        self.backgroundColor = visualStyle.backgroundColor
         self.addCancelButton(action: cancelAction, visualStyle: visualStyle)
     }
 
@@ -45,19 +44,6 @@ final class ActionSheetCancelActionView: UIView {
         }
     }
 
-    private func addBlurBackground(effect: UIBlurEffect) {
-        self.blurBackground.effect = effect
-        self.blurBackground.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(self.blurBackground)
-
-        NSLayoutConstraint.activate([
-            self.blurBackground.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            self.blurBackground.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            self.blurBackground.topAnchor.constraint(equalTo: self.topAnchor),
-            self.blurBackground.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-        ])
-    }
-
     private func addCancelButton(action: AlertAction, visualStyle: AlertVisualStyle) {
         self.cancelButton.translatesAutoresizingMaskIntoConstraints = false
         self.cancelButton.addTarget(self, action: #selector(self.cancelTapped), for: .touchUpInside)
@@ -68,10 +54,6 @@ final class ActionSheetCancelActionView: UIView {
 
         if let backgroundColor = visualStyle.backgroundColor ?? visualStyle.actionViewCancelBackgroundColor {
             self.cancelButton.backgroundColor = backgroundColor
-            // Move the blur over the button to ensure color consistency with the rest of the action sheet but
-            // underneath the label to avoid blurring the label. The blur passes through touches so the button
-            // can still be tapped.
-            self.bringSubviewToFront(self.blurBackground)
         }
 
         self.cancelLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -114,11 +96,5 @@ private extension UIImage {
         color.setFill()
         context.fill(rect)
         return UIGraphicsGetImageFromCurrentImageContext()
-    }
-}
-
-final class PassthroughEffectView: UIVisualEffectView {
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        return nil
     }
 }

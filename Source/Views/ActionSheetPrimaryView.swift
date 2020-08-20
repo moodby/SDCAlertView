@@ -35,14 +35,21 @@ final class ActionSheetPrimaryView: UIView {
     func buildView(actions: [AlertAction], contentView: UIView, visualStyle: AlertVisualStyle) {
         self.configure(visualStyle: visualStyle)
 
-        let backgroundBlur = self.buildBackgroundBlur(effect: visualStyle.blurEffect)
-        let labelVibrancy = self.buildLabelVibrancy(effect: visualStyle.blurEffect)
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = .clear
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(backgroundView)
+
+        let labelContainerView = UIView()
+        labelContainerView.backgroundColor = .clear
+        labelContainerView.translatesAutoresizingMaskIntoConstraints = false
+
         let contentContainer = UIView()
         contentContainer.translatesAutoresizingMaskIntoConstraints = false
 
-        let stackView = self.buildStackView(views: [labelVibrancy, contentContainer, self.actionsView],
-                                            in: backgroundBlur)
-        self.buildLabelsView(in: labelVibrancy)
+        let stackView = self.buildStackView(views: [labelContainerView, contentContainer, self.actionsView],
+                                            in: backgroundView)
+        self.buildLabelsView(in: labelContainerView)
         self.buildContentView(contentView, in: contentContainer, visualStyle: visualStyle)
         self.buildActionsView(self.actionsView, actions: actions, visualStyle: visualStyle)
 
@@ -50,10 +57,10 @@ final class ActionSheetPrimaryView: UIView {
         NSLayoutConstraint.activate([
             self.titleLabel.widthAnchor.constraint(equalTo: stackView.widthAnchor, constant: -padding),
 
-            backgroundBlur.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            backgroundBlur.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            backgroundBlur.topAnchor.constraint(equalTo: self.topAnchor),
-            backgroundBlur.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            backgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            backgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            backgroundView.topAnchor.constraint(equalTo: self.topAnchor),
+            backgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
         ])
     }
 
@@ -63,31 +70,13 @@ final class ActionSheetPrimaryView: UIView {
         self.layer.masksToBounds = true
     }
 
-    private func buildBackgroundBlur(effect: UIVisualEffect) -> UIVisualEffectView {
-        let backgroundBlur = UIVisualEffectView(effect: effect)
-        backgroundBlur.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(backgroundBlur)
-
-        return backgroundBlur
-    }
-
-    private func buildLabelVibrancy(effect: UIBlurEffect) -> UIVisualEffectView {
-        let vibrancy = UIVisualEffectView(effect: effect)
-        vibrancy.translatesAutoresizingMaskIntoConstraints = false
-        if #available(iOS 13, *) {
-            vibrancy.effect = UIVibrancyEffect(blurEffect: effect, style: .secondaryLabel)
-        }
-
-        return vibrancy
-    }
-
-    private func buildStackView(views: [UIView], in parent: UIVisualEffectView) -> UIStackView {
+    private func buildStackView(views: [UIView], in parent: UIView) -> UIStackView {
         let stackView = UIStackView(arrangedSubviews: views)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.alignment = .center
 
-        parent.contentView.addSubview(stackView)
+        parent.addSubview(stackView)
 
         // Skip aligning labels, they're aligned separately as they have to account for padding
         for view in views[1...] {
@@ -107,18 +96,26 @@ final class ActionSheetPrimaryView: UIView {
         return stackView
     }
 
-    private func buildLabelsView(in parent: UIVisualEffectView) {
+    private func buildLabelsView(in parent: UIView) {
         parent.isHidden = self.title?.string.isEmpty != false && self.message?.string.isEmpty != false
-        parent.contentView.addSubview(self.titleLabel)
+        parent.addSubview(self.titleLabel)
 
-        self.titleLabel.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
-        self.titleLabel.textColor = .darkText
+        if let attributes = self.title {
+            self.titleLabel.attributedText = attributes
+        } else {
+            self.titleLabel.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+            self.titleLabel.textColor = .darkText
+        }
 
-        self.messageLabel.font = UIFont.systemFont(ofSize: 13)
-        self.messageLabel.textColor = .darkText
+        if let attributes = self.message {
+            self.messageLabel.attributedText = attributes
+        } else {
+            self.messageLabel.font = UIFont.systemFont(ofSize: 13)
+            self.messageLabel.textColor = .darkText
+        }
 
         if self.message != nil {
-            parent.contentView.addSubview(self.messageLabel)
+            parent.addSubview(self.messageLabel)
 
             NSLayoutConstraint.activate([
                 self.messageLabel.leadingAnchor.constraint(equalTo: self.titleLabel.leadingAnchor),
