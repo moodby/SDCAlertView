@@ -4,10 +4,16 @@ class Transition: NSObject, UIViewControllerTransitioningDelegate {
 
     private let alertStyle: AlertControllerStyle
     private let dimmingViewColor: UIColor
+    private let backgroundStyle: BackgroundStyle
 
-    init(alertStyle: AlertControllerStyle, dimmingViewColor: UIColor) {
+    init(
+        alertStyle: AlertControllerStyle,
+        dimmingViewColor: UIColor,
+        backgroundStyle: BackgroundStyle
+    ) {
         self.alertStyle = alertStyle
         self.dimmingViewColor = dimmingViewColor
+        self.backgroundStyle = backgroundStyle
     }
 
     func presentationController(forPresented presented: UIViewController,
@@ -16,7 +22,8 @@ class Transition: NSObject, UIViewControllerTransitioningDelegate {
     {
         return PresentationController(presentedViewController: presented,
                                       presenting: presenting,
-                                      dimmingViewColor: dimmingViewColor)
+                                      dimmingViewColor: dimmingViewColor,
+                                      backgroundStyle: backgroundStyle)
     }
 
     func animationController(forPresented presented: UIViewController,
