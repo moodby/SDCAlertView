@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### 11.1.4
+**Bug Fixes:**
+- Added blure background
+- Fixed applying background color for cancel button 
+
 ### 11.1.3
 **Bug Fixes:**
 - Removed blur
