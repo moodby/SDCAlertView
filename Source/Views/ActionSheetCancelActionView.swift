@@ -52,7 +52,7 @@ final class ActionSheetCancelActionView: UIView {
         self.cancelButton.setBackgroundImage(background, for: .highlighted)
         self.addSubview(self.cancelButton)
 
-        if let backgroundColor = visualStyle.backgroundColor ?? visualStyle.actionViewCancelBackgroundColor {
+        if let backgroundColor = visualStyle.actionViewCancelBackgroundColor ?? visualStyle.backgroundColor {
             self.cancelButton.backgroundColor = backgroundColor
         }
 
