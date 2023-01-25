@@ -1,5 +1,14 @@
 import UIKit
 
+/// The background view's style
+@objc(SDCBackgroundStyle)
+public enum BackgroundStyle: Int {
+    // Vertical gradient from bottom to top with applied dimmingViewColor.
+    case gradient
+    // Filled background with dimmingViewColor.
+    case plain
+}
+
 /// The alert controller's style
 @objc(SDCAlertControllerStyle)
 public enum AlertControllerStyle: Int {
@@ -129,8 +138,11 @@ public final class AlertController: UIViewController {
     public let preferredStyle: AlertControllerStyle
 
     private let alert: UIView & AlertControllerViewRepresentable
-    private lazy var transitionDelegate = Transition(alertStyle: self.preferredStyle,
-                                                     dimmingViewColor: self.visualStyle.dimmingColor)
+    private lazy var transitionDelegate = Transition(
+        alertStyle: self.preferredStyle,
+        dimmingViewColor: self.visualStyle.dimmingColor,
+        backgroundStyle: self.visualStyle.backgroundStyle
+    )
 
     // MARK: - Initialization
 
