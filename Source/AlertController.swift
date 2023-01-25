@@ -133,6 +133,10 @@ public final class AlertController: UIViewController {
     @objc
     public lazy var visualStyle: AlertVisualStyle = AlertVisualStyle(alertStyle: self.preferredStyle)
 
+    // The style of background.
+    @objc
+    public var backgroundStyle: BackgroundStyle = .plain
+
     /// The alert's presentation style.
     @objc
     public let preferredStyle: AlertControllerStyle
@@ -141,7 +145,7 @@ public final class AlertController: UIViewController {
     private lazy var transitionDelegate = Transition(
         alertStyle: self.preferredStyle,
         dimmingViewColor: self.visualStyle.dimmingColor,
-        backgroundStyle: self.visualStyle.backgroundStyle
+        backgroundStyle: self.backgroundStyle
     )
 
     // MARK: - Initialization
@@ -154,10 +158,13 @@ public final class AlertController: UIViewController {
     /// - parameter attributedMessage: An optional stylized message
     /// - parameter preferredStyle:    The preferred presentation style of the alert. Default is `alert`.
     @objc
-    public convenience init(attributedTitle: NSAttributedString?, attributedMessage: NSAttributedString?,
-        preferredStyle: AlertControllerStyle = .alert)
-    {
-        self.init(preferredStyle: preferredStyle)
+    public convenience init(
+        attributedTitle: NSAttributedString?,
+        attributedMessage: NSAttributedString?,
+        preferredStyle: AlertControllerStyle = .alert,
+        backgroundStyle: BackgroundStyle = .plain
+    ) {
+        self.init(preferredStyle: preferredStyle, backgroundStyle: backgroundStyle)
         self.commonInit()
 
         self.attributedTitle = attributedTitle
@@ -171,16 +178,20 @@ public final class AlertController: UIViewController {
     /// - parameter message:        An optional message
     /// - parameter preferredStyle: The preferred presentation style of the alert. Default is `alert`.
     @objc
-    public convenience init(title: String?, message: String?, preferredStyle: AlertControllerStyle = .alert)
-    {
-        self.init(preferredStyle: preferredStyle)
+    public convenience init(
+        title: String?,
+        message: String?,
+        preferredStyle: AlertControllerStyle = .alert,
+        backgroundStyle: BackgroundStyle = .plain
+    ) {
+        self.init(preferredStyle: preferredStyle, backgroundStyle: backgroundStyle)
         self.commonInit()
 
         self.title = title
         self.message = message
     }
 
-    private init(preferredStyle: AlertControllerStyle) {
+    private init(preferredStyle: AlertControllerStyle, backgroundStyle: BackgroundStyle) {
         switch preferredStyle {
         case .alert:
             self.alert = AlertView()
@@ -190,6 +201,8 @@ public final class AlertController: UIViewController {
         }
 
         self.preferredStyle = preferredStyle
+        self.backgroundStyle = backgroundStyle
+
         super.init(nibName: nil, bundle: nil)
     }
 

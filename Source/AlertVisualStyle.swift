@@ -145,10 +145,6 @@ open class AlertVisualStyle: NSObject {
         }
     }
 
-    // The style of background.
-    @objc
-    public var backgroundStyle: BackgroundStyle = .plain
-
     /// The style of the alert.
     private let alertStyle: AlertControllerStyle
 
