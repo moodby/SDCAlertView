@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 11.1.5
+**Bug Fixes:**
+- Fixed blure background
+
 ### 11.1.4
 **Bug Fixes:**
 - Added blure background
