@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 11.1.6
+**Bug Fixes:**
+- Fix Transition reference collision with iOS 18 API
+
 ### 11.1.5
 **Bug Fixes:**
 - Fixed blure background
